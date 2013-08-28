@@ -45,15 +45,29 @@ func readTargets(source io.Reader) (Targets, error) {
 func NewTargets(lines []string) (Targets, error) {
 	targets := make([]*http.Request, 0)
 	for _, line := range lines {
-		parts := strings.SplitN(line, " ", 2)
-		if len(parts) != 2 {
+		parts := strings.SplitN(line, " " , 3)
+		if len(parts) < 2 {
 			return targets, fmt.Errorf("Invalid request format: `%s`", line)
 		}
 		// Build request
 		req, err := http.NewRequest(parts[0], parts[1], nil)
+
+		fmt.Println(req.Header)
+
+		if len(parts) == 3 {
+			headers := strings.Split(parts[2], "✰")
+			for _, header := range headers {
+				parts := strings.SplitN(header, ":", 2)
+				req.Header.Add(parts[0], parts[1])
+			}
+		}
+
 		if err != nil {
 			return targets, fmt.Errorf("Failed to build request: %s", err)
 		}
+
+		fmt.Println("Target: ", req)
+
 		targets = append(targets, req)
 	}
 	return targets, nil

@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	vegeta "github.com/tsenart/vegeta/lib"
+	vegeta "github.com/ANorwell/vegeta/lib"
 	"io"
 	"log"
 	"os"
