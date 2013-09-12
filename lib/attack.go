@@ -49,6 +49,7 @@ func drill(rate uint64, reqs chan *http.Request, res chan *result) {
 // Both transport errors and unsucessfull requests (non {2xx,3xx}) are
 // considered errors which are set in the Response.
 func hit(req *http.Request, res chan *result) {
+
 	began := time.Now()
 	r, err := http.DefaultClient.Do(req)
 	result := &result{

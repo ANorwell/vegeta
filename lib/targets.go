@@ -52,15 +52,19 @@ func NewTargets(lines []string) (Targets, error) {
 		// Build request
 		req, err := http.NewRequest(parts[0], parts[1], nil)
 
-		fmt.Println(req.Header)
+		if len(parts) >= 3 {
+			req.Host = parts[2]
+		}
 
-		if len(parts) == 3 {
-			headers := strings.Split(parts[2], "✰")
+		if len(parts) == 4 {
+			headers := strings.Split(parts[3], "✰")
 			for _, header := range headers {
-				parts := strings.SplitN(header, ":", 2)
-				req.Header.Add(parts[0], parts[1])
+				pair:= strings.SplitN(header, ":", 2)
+				req.Header.Add(pair[0], pair[1])
 			}
 		}
+
+		req.Write(os.Stdout)
 
 		if err != nil {
 			return targets, fmt.Errorf("Failed to build request: %s", err)
